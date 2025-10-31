@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles2.css') }}">
+    <style>
+        .flash-messages {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+        .alert {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            animation: fadeOut 5s forwards; /* Fade out after 5 seconds */
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            90% { opacity: 0.1; }
+            100% { display: none; opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Logo" class="logo-img">
+        </div>
+        <ul class="nav-links">
+            <li><a href="home.php">Home</a></li>
+            <li><a href="categories.php">Categories</a></li>
+            <li><a href="accounts.php">Accounts</a></li>
+            <li><a href="transactions.php">Transactions</a></li>
+            <li><a href="reports.php">Reports</a></li>
+            <li><a href="profile.php">Profile</a></li>
+        </ul>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="content">
+        <h2 class="welcome">Welcome back, <?php echo htmlspecialchars($userName); ?>!</h2>
+        <p class="subtext">Here's your financial summary today.</p>
+
+        <div class="balance-section">
+            <h2>Total Balance</h2>
+            <p class="balance-amount">$<?php echo number_format($balance, 2); ?></p>
+        </div>
+    </div>
+
+</body>
+</html>

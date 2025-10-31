@@ -1,77 +1,89 @@
-<!DOCTYPE html>
+<?php
+session_start();
 
-<html>
+// Redirect if not logged in
+if (!isset($_SESSION["user_name"])) {
+    header("Location: signin.php");
+    exit();
+}
 
-<head>
+$userName = $_SESSION["user_name"];
+?>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link rel="stylesheet" href="bootstrap.css" />
-    <link rel="stylesheet" href="style.css" />
-
-</head>
-
-<body>
-
-    <div class="col-12">
-        <div class="row mt-1 mb-1">
-
-            <div class="offset-lg-1 col-12 col-lg-3 align-self-start mt-2">
-
-            <?php
-            session_start();
-
-            if(isset($_SESSION["u"])){
-                $data = $_SESSION["u"];
-                ?>
-                <span class="text-lg-start text-success"><b>Hi </b><?php echo $data["fname"]; ?></span> | 
-                <span class="text-lg-start fw-bold signout" onclick="signout();">Signout</span> |
-                <?php
-
-            }else{
-                ?>
-                <a href="index.php" class="text-decoration-none fw-bold">Sign In</a> |
-                <?php
-            }
-            
-            ?>
-
-                <span class="text-lg-start fw-bold">Help and Contact</span>
-
-            </div>
-
-            <div class="col-12 col-lg-3 offset-lg-5 align-self-end" style="text-align: center;">
-                <div class="row">
-
-                    <div class="col-1 col-lg-3 mt-2">
-                        <span class="text-start fw-bold"></span>
-                    </div>
-
-                    <div class="col-12 col-lg-6 dropdown">
-                        <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            PFMS
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="accounts.php">Accounts</a></li>
-                            <li><a class="dropdown-item" href="categories.php">Categories</a></li>
-                            <li><a class="dropdown-item" href="transactions.php">Transactions</a></li>
-                            <li><a class="dropdown-item" href="reports.php">Reports</a></li>
-                            <li><a class="dropdown-item" href="sync.php">Sync</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="col-1 col-lg-3 ms-5 ms-lg-0 mt-1 cart-icon" onclick="window.location='cart.php';"></div>
-
-                    
-                </div>
-            </div>
-
-        </div>
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="logo">
+        <img src="images/personal-growth.png" alt="Logo" class="logo-img">
+        <span class="logo-text">Finance</span>
     </div>
+    <ul class="nav-links">
+        <li><a href="dashboard.php" class="<?php if(basename($_SERVER['PHP_SELF'])=='dashboard.php'){echo 'active';} ?>">Dashboard</a></li>
+        <li><a href="categories.php" class="<?php if(basename($_SERVER['PHP_SELF'])=='categories.php'){echo 'active';} ?>">Categories</a></li>
+        <li><a href="accounts.php" class="<?php if(basename($_SERVER['PHP_SELF'])=='accounts.php'){echo 'active';} ?>">Accounts</a></li>
+        <li><a href="transactions.php" class="<?php if(basename($_SERVER['PHP_SELF'])=='transactions.php'){echo 'active';} ?>">Transactions</a></li>
+        <li><a href="reports.php" class="<?php if(basename($_SERVER['PHP_SELF'])=='reports.php'){echo 'active';} ?>">Reports</a></li>
+        <li><a href="sync.php" class="<?php if(basename($_SERVER['PHP_SELF'])=='sync.php'){echo 'active';} ?>">Backup</a></li>
+        <li><a href="profile.php" class="<?php if(basename($_SERVER['PHP_SELF'])=='profile.php'){echo 'active';} ?>">Profile</a></li>
+    </ul>
+</div>
 
+<!-- Sidebar Styles (can be moved to a separate CSS file) -->
+<style>
+.sidebar {
+    width: 240px;
+    background-color: #1e1e2f;
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 25px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+}
 
-    <script src="script.js"></script>
-</body>
+.logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
 
-</html>
+.logo-img {
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.logo-text {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.nav-links li {
+    width: 100%;
+}
+
+.nav-links li a {
+    display: block;
+    padding: 15px 20px;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+    background-color: #00b894;
+    color: #fff;
+}
+</style>

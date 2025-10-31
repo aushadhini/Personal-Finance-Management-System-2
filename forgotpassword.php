@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In</title>
+    <title>Forgot Password</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -18,7 +18,7 @@
             align-items: center;
         }
 
-        .login-container {
+        .forgot-container {
             background: linear-gradient(135deg, #74b9ff, #a29bfe);
             padding: 45px;
             border-radius: 20px;
@@ -34,7 +34,7 @@
             text-align: center;
             font-weight: 600;
             font-size: 28px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         label {
@@ -94,7 +94,7 @@
         }
 
         @media (max-width: 768px) {
-            .login-container {
+            .forgot-container {
                 padding: 30px;
                 margin: 20px;
             }
@@ -103,47 +103,47 @@
 </head>
 
 <body>
-    <div class="login-container">
-        <p class="title02">Welcome Back!</p>
-        <p style="margin-top: -10px;">Sign in to your account</p>
+    <div class="forgot-container">
+        <p class="title02">Forgot Password</p>
+        <p style="margin-top: -10px;">Enter your email and we’ll send reset instructions</p>
 
         <div class="col-12 d-none" id="msgdiv">
             <div class="alert alert-danger" role="alert" id="msg"></div>
         </div>
 
         <div class="text-start mt-4">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control mb-3" placeholder="Ex: john@gmail.com" id="email">
-        </div>
-
-        <div class="text-start">
-            <label class="form-label">Password</label>
-            <input type="password" class="form-control mb-4" placeholder="*********" id="password">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-control mb-4" placeholder="Ex: john@gmail.com" id="email">
         </div>
 
         <div class="d-grid mb-3">
-            <button class="btn btn-primary" onclick="signin();">Sign In</button>
+            <button class="btn btn-primary" onclick="sendResetLink();">Send Reset Link</button>
         </div>
 
         <div class="d-grid">
-            <button class="btn btn-dark" onclick="changeView();">Create New Account</button>
+            <button class="btn btn-dark" onclick="backToLogin();">Back to Sign In</button>
         </div>
-
-        <p style="margin-top: 20px; font-size: 14px;">Forgot Password? <a href="#" style="color: #fff; text-decoration: underline;">Click here</a></p>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        function signin() {
-             window.location.href = "dashboard.php";
+        function sendResetLink() {
+            const email = document.getElementById('email').value;
+            if (email.trim() === '') {
+                document.getElementById('msgdiv').classList.remove('d-none');
+                document.getElementById('msg').innerText = 'Please enter your email address!';
+                return;
+            }
+            alert('Password reset link has been sent to ' + email);
+            // You can replace this alert with your AJAX or PHP email function later
         }
 
-        function changeView() {
-            window.location.href = "dashboard.php";
-            window.location.href = "dashboard.php";
+        function backToLogin() {
+            window.location.href = "signin.php";
         }
     </script>
 </body>
 </html>
+

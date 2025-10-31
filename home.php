@@ -1,199 +1,187 @@
-<?php include "connection.php"; ?>
+<?php
+session_start();
+
+// Example data
+$userName = $_SESSION["user_name"];
+$totalBalance = 15420.75;
+$totalAccounts = 5;
+$totalTransactions = 120;
+$totalCategories = 8;
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PFMS | Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Finance Dashboard</title>
+    <link rel="stylesheet" href="styles2.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            background-color: #f5f6fa;
+            margin: 0;
+        }
 
-  <link rel="stylesheet" href="bootstrap.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-  <link rel="icon" href="resource/logo.svg" />
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background-color: #1e1e2f;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 25px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+        }
 
-  <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #f9f0ff, #e3f2ff);
-      min-height: 100vh;
-      color: #333;
-    }
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
 
-    .navbar {
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(15px);
-      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-      padding: 15px 40px;
-      border-radius: 20px;
-      margin: 20px;
-    }
+        .logo-img {
+            height: 45px;
+            width: 45px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
 
-    .navbar-brand {
-      font-weight: 700;
-      color: #6a11cb !important;
-      font-size: 1.5rem;
-    }
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+        }
 
-    .nav-link {
-      color: #333 !important;
-      font-weight: 500;
-      transition: 0.3s;
-    }
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
 
-    .nav-link:hover {
-      color: #6a11cb !important;
-    }
+        .nav-links li {
+            width: 100%;
+        }
 
-    .search-section {
-      margin-top: 50px;
-      text-align: center;
-    }
+        .nav-links li a {
+            display: block;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
 
-    .search-box {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      margin-top: 20px;
-    }
+        .nav-links li a:hover,
+        .nav-links li a.active {
+            background-color: #00b894;
+            color: #fff;
+        }
 
-    .form-control, .form-select {
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-    }
+        /* Main Content */
+        .main-content {
+            margin-left: 240px;
+            padding: 40px;
+            flex-grow: 1;
+        }
 
-    .btn-primary {
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      border: none;
-      border-radius: 12px;
-      padding: 10px 25px;
-      font-weight: 600;
-      transition: 0.3s;
-    }
+        .welcome {
+            font-size: 26px;
+            font-weight: 600;
+            color: #2d3436;
+            margin-bottom: 20px;
+        }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(106, 17, 203, 0.3);
-    }
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
 
-    .advanced-link {
-      color: #6a11cb;
-      font-weight: 600;
-      text-decoration: none;
-      transition: 0.3s;
-    }
+        .card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+        }
 
-    .advanced-link:hover {
-      text-decoration: underline;
-    }
+        .card h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #2d3436;
+        }
 
-    .carousel-section {
-      margin: 60px auto;
-      width: 80%;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
+        .card p {
+            font-size: 18px;
+            font-weight: 600;
+            color: #00b894;
+        }
 
-    .category-section {
-      margin-top: 80px;
-      text-align: center;
-    }
-
-    .category-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #333;
-    }
-
-    .see-all {
-      color: #2575fc;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    footer {
-      margin-top: 100px;
-      text-align: center;
-      color: #777;
-      padding-bottom: 30px;
-      font-size: 0.9rem;
-    }
-  </style>
+        .card i {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #0984e3;
+        }
+    </style>
 </head>
-
 <body>
 
-  <!-- Header -->
-  <nav class="navbar navbar-expand-lg">
-    <a class="navbar-brand" href="#">PFMS</a>
-    <div class="ms-auto d-flex gap-3">
-      <a href="signIn.php" class="nav-link">Sign In</a>
-      <a href="#" class="nav-link">Help</a>
-      <a href="#" class="nav-link">Contact</a>
-    </div>
-  </nav>
-
-  <!-- Search Section -->
-  <div class="search-section">
-    <h2 class="fw-bold">Search Your Financial Records</h2>
-    <div class="search-box">
-      <input type="text" class="form-control w-50" placeholder="Search..." id="basic_search_txt">
-      <select class="form-select w-auto" id="basic_search_select">
-        <option value="0">All Categories</option>
-      </select>
-      <button class="btn btn-primary" onclick="basicSearch(0);">Search</button>
-    </div>
-    <div class="mt-3">
-      <a href="advancedSearch.php" class="advanced-link">Advanced Search</a>
-    </div>
-  </div>
-
-  <!-- Carousel -->
-  <div class="carousel-section">
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
-      <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></button>
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></button>
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></button>
-      </div>
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img src="resource/banner1.jpg" class="d-block w-100" alt="banner1">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="images/personal-growth.png" alt="Logo" class="logo-img">
+            <span class="logo-text">Finance</span>
         </div>
-        <div class="carousel-item">
-          <img src="resource/banner2.jpg" class="d-block w-100" alt="banner2">
-        </div>
-        <div class="carousel-item">
-          <img src="resource/banner3.jpg" class="d-block w-100" alt="banner3">
-        </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button>
+        <ul class="nav-links">
+            <li><a href="dashboard.php">Dashboard</a></li>
+            <li><a href="home.php" class="active">Home</a></li>
+            <li><a href="categories.php">Categories</a></li>
+            <li><a href="accounts.php">Accounts</a></li>
+            <li><a href="transactions.php">Transactions</a></li>
+            <li><a href="reports.php">Reports</a></li>
+            <li><a href="backup.php">Backup</a></li>
+            <li><a href="profile.php">Profile</a></li>
+        </ul>
     </div>
-  </div>
 
-  <!-- Categories Section -->
-  <div class="category-section">
-    <div class="category-title">
-      <?php echo $category_data2["cat_name"]; ?>
-      <a href="#" class="see-all ms-3">See All →</a>
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2 class="welcome">Welcome back<?php echo htmlspecialchars($userName); ?>!</h2>
+        <p>Here’s a quick overview of your finances:</p>
+
+        <div class="stats-cards mt-4">
+            <div class="card">
+                <i class="bi bi-wallet2"></i>
+                <h3>Total Balance</h3>
+                <p>$<?php echo number_format($totalBalance, 2); ?></p>
+            </div>
+            <div class="card">
+                <i class="bi bi-bank"></i>
+                <h3>Accounts</h3>
+                <p><?php echo $totalAccounts; ?></p>
+            </div>
+            <div class="card">
+                <i class="bi bi-arrow-up-circle"></i>
+                <h3>Transactions</h3>
+                <p><?php echo $totalTransactions; ?></p>
+            </div>
+            <div class="card">
+                <i class="bi bi-tags"></i>
+                <h3>Categories</h3>
+                <p><?php echo $totalCategories; ?></p>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Footer -->
-  <footer>
-    © <?php echo date("Y"); ?> PFMS | All rights reserved
-  </footer>
-
-  <script src="bootstrap.bundle.js"></script>
-  <script src="script.js"></script>
-
+    <!-- Bootstrap JS & Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </body>
 </html>

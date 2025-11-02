@@ -14,7 +14,7 @@ $userName = $_SESSION["user_name"];
 <div class="sidebar">
     <div class="logo">
         <img src="images/personal-growth.png" alt="Logo" class="logo-img">
-        <span class="logo-text">Finance</span>
+        <span class="logo-text">PFMS</span>
     </div>
     <ul class="nav-links">
         <li><a href="dashboard.php" class="<?php if(basename($_SERVER['PHP_SELF'])=='dashboard.php'){echo 'active';} ?>">Dashboard</a></li>

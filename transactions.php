@@ -27,10 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['transactions'][] = $newTx;
     } elseif ($_POST['action'] === 'edit') {
         foreach ($_SESSION['transactions'] as &$tx) {
-            if ($tx['id'] == $_POST['id']) {
-                $tx = $newTx;
-                break;
-            }
+            if ($tx['id'] == $_POST['id']) { $tx = $newTx; break; }
         }
     } elseif ($_POST['action'] === 'delete') {
         $_SESSION['transactions'] = array_filter($_SESSION['transactions'], fn($t) => $t['id'] != $_POST['id']);
@@ -46,114 +43,162 @@ $transactions = $_SESSION['transactions'];
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transactions - Finance Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            background-color: #f5f6fa;
-            margin: 0;
-        }
-        .sidebar {
-            width: 240px;
-            background-color: #1e1e2f;
-            color: white;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 25px;
-            position: fixed;
-            left: 0;
-            top: 0;
-            box-shadow: 2px 0 8px rgba(0,0,0,0.2);
-        }
-        .logo {
-            display: flex;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-        .logo-img {
-            height: 45px;
-            width: 45px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .logo-text {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        .nav-links {
-            list-style: none;
-            padding: 0;
-            width: 100%;
-        }
-        .nav-links li a {
-            display: block;
-            padding: 15px 20px;
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-        .nav-links li a:hover,
-        .nav-links li a.active {
-            background-color: #00b894;
-            color: #fff;
-        }
-        .main-content {
-            margin-left: 240px;
-            padding: 40px;
-            flex-grow: 1;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .btn-add {
-            background-color: #00b894;
-            border: none;
-            color: white;
-            font-weight: 500;
-            border-radius: 10px;
-            padding: 10px 20px;
-        }
-        .btn-add:hover { background-color: #019f7f; }
-        table {
-            width: 100%;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        th, td { padding: 12px; text-align: left; }
-        th {
-            background-color: #0984e3;
-            color: white;
-        }
-        .action-btn {
-            border: none;
-            padding: 5px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-right: 5px;
-            font-size: 14px;
-            color: white;
-        }
-        .btn-edit { background-color: #00b894; }
-        .btn-delete { background-color: #d63031; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transactions - Finance Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    margin: 0;
+    background: linear-gradient(135deg, #eef2f3, #dfe9f3);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: linear-gradient(180deg, #6a11cb, #2575fc);
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.15);
+    border-radius: 0 20px 20px 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.logo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid white;
+}
+
+.logo-text {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.nav-links li a {
+    display: block;
+    padding: 15px 30px;
+    color: rgba(255,255,255,0.9);
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+    border-left: 4px solid transparent;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+    background: rgba(255,255,255,0.15);
+    border-left: 4px solid #fff;
+    color: #fff;
+    backdrop-filter: blur(5px);
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 270px;
+    padding: 40px;
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.header h2 { font-weight: 600; color: #2d3436; }
+
+.btn-add {
+    background-color: #00b894;
+    border: none;
+    color: white;
+    font-weight: 500;
+    border-radius: 10px;
+    padding: 10px 20px;
+    transition: 0.3s;
+}
+
+.btn-add:hover { background-color: #019f7f; }
+
+/* Table Styling */
+.table-container {
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #0984e3;
+    color: white;
+    border-radius: 10px 10px 0 0;
+}
+
+tr:hover { background-color: rgba(0,0,0,0.05); }
+
+.action-btn {
+    border: none;
+    padding: 5px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 5px;
+    font-size: 14px;
+    color: white;
+}
+
+.btn-edit { background-color: #00b894; }
+.btn-delete { background-color: #d63031; }
+
+.modal-content {
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+</style>
 </head>
 <body>
 
 <!-- Sidebar -->
 <div class="sidebar">
     <div class="logo">
-        <img src="images/personal-growth.png" alt="Logo" class="logo-img">
-        <span class="logo-text">Finance</span>
+        <img src="logo.jpeg" alt="Logo">
+        <span class="logo-text">PFMS</span>
     </div>
     <ul class="nav-links">
         <li><a href="dashboard.php">Dashboard</a></li>
@@ -169,46 +214,48 @@ $transactions = $_SESSION['transactions'];
 
 <!-- Main Content -->
 <div class="main-content">
-    <div class="header mb-3">
+    <div class="header">
         <h2>Transactions</h2>
         <button class="btn-add" data-bs-toggle="modal" data-bs-target="#transactionModal">➕ Add Transaction</button>
     </div>
 
-    <table class="table table-borderless">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Account</th>
-                <th>Category</th>
-                <th>Type</th>
-                <th>Amount</th>
-                <th>Notes</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach($transactions as $tx): ?>
-            <tr>
-                <td><?= $tx['id']; ?></td>
-                <td><?= $tx['date']; ?></td>
-                <td><?= htmlspecialchars($tx['account']); ?></td>
-                <td><?= htmlspecialchars($tx['category']); ?></td>
-                <td><?= $tx['type']; ?></td>
-                <td>$<?= number_format($tx['amount'], 2); ?></td>
-                <td><?= htmlspecialchars($tx['notes']); ?></td>
-                <td>
-                    <button class="action-btn btn-edit" onclick='editTransaction(<?= json_encode($tx); ?>)'>Edit</button>
-                    <form method="POST" style="display:inline;">
-                        <input type="hidden" name="id" value="<?= $tx['id']; ?>">
-                        <input type="hidden" name="action" value="delete">
-                        <button type="submit" class="action-btn btn-delete" onclick="return confirm('Delete this transaction?')">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Account</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Notes</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($transactions as $tx): ?>
+                <tr>
+                    <td><?= $tx['id']; ?></td>
+                    <td><?= $tx['date']; ?></td>
+                    <td><?= htmlspecialchars($tx['account']); ?></td>
+                    <td><?= htmlspecialchars($tx['category']); ?></td>
+                    <td><?= $tx['type']; ?></td>
+                    <td>$<?= number_format($tx['amount'], 2); ?></td>
+                    <td><?= htmlspecialchars($tx['notes']); ?></td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick='editTransaction(<?= json_encode($tx); ?>)'>Edit</button>
+                        <form method="POST" style="display:inline;">
+                            <input type="hidden" name="id" value="<?= $tx['id']; ?>">
+                            <input type="hidden" name="action" value="delete">
+                            <button type="submit" class="action-btn btn-delete" onclick="return confirm('Delete this transaction?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <!-- Add/Edit Modal -->
@@ -223,10 +270,10 @@ $transactions = $_SESSION['transactions'];
         <div class="modal-body">
           <input type="hidden" name="id" id="tx_id">
           <input type="hidden" name="action" id="tx_action" value="add">
-          
+
           <label>Date</label>
           <input type="date" class="form-control mb-2" name="date" id="tx_date" required>
-          
+
           <label>Account</label>
           <input type="text" class="form-control mb-2" name="account" id="tx_account" required>
 

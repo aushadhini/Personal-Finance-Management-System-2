@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Example accounts (replace with DB query)
+// Temporary sample data (replace this with DB query later)
 $accounts = [
     ["id"=>1, "name"=>"Checking Account", "type"=>"Bank", "balance"=>2000],
     ["id"=>2, "name"=>"Savings Account", "type"=>"Bank", "balance"=>5000],
@@ -12,244 +12,351 @@ $accounts = [
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accounts - Finance Dashboard</title>
-    <link rel="stylesheet" href="styles2.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accounts - Finance Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
 
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            background-color: #f5f6fa;
-            margin: 0;
-        }
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      margin: 0;
+      background: linear-gradient(135deg, #eef2f3, #dfe9f3);
+    }
 
-        /* Sidebar */
-        .sidebar {
-            width: 240px;
-            background-color: #1e1e2f;
-            color: white;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 25px;
-            position: fixed;
-            left: 0;
-            top: 0;
-            box-shadow: 2px 0 8px rgba(0,0,0,0.2);
-        }
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: linear-gradient(180deg, #6a11cb, #2575fc);
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 4px 0 15px rgba(0,0,0,0.15);
+      border-radius: 0 20px 20px 0;
+    }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            margin-bottom: 40px;
-        }
+    .logo {
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+    }
 
-        .logo-img {
-            height: 45px;
-            width: 45px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
+    .logo img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+      border: 2px solid white;
+    }
 
-        .logo-text {
-            font-size: 18px;
-            font-weight: 600;
-        }
+    .logo-text {
+      font-size: 20px;
+      font-weight: 600;
+    }
 
-        .nav-links {
-            list-style: none;
-            padding: 0;
-            width: 100%;
-        }
+    .nav-links {
+      list-style: none;
+      padding: 0;
+      width: 100%;
+      margin-top: 20px;
+    }
 
-        .nav-links li {
-            width: 100%;
-        }
+    .nav-links li a {
+      display: block;
+      padding: 15px 30px;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s;
+      border-left: 4px solid transparent;
+    }
 
-        .nav-links li a {
-            display: block;
-            padding: 15px 20px;
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: 0.3s;
-        }
+    .nav-links li a:hover,
+    .nav-links li a.active {
+      background: rgba(255,255,255,0.15);
+      border-left: 4px solid #fff;
+      color: #fff;
+      backdrop-filter: blur(5px);
+    }
 
-        .nav-links li a:hover,
-        .nav-links li a.active {
-            background-color: #00b894;
-            color: #fff;
-        }
+    /* Main Content */
+    .main-content {
+      margin-left: 270px;
+      padding: 40px;
+      width: 100%;
+    }
 
-        /* Main Content */
-        .main-content {
-            margin-left: 240px;
-            padding: 40px;
-            flex-grow: 1;
-        }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+    .header h2 {
+      font-weight: 600;
+      color: #2d3436;
+    }
 
-        .header h2 {
-            font-size: 26px;
-            font-weight: 600;
-            color: #2d3436;
-        }
+    .btn-add {
+      background: linear-gradient(90deg, #00b894, #019fef);
+      border: none;
+      color: white;
+      font-weight: 500;
+      border-radius: 12px;
+      padding: 10px 25px;
+      transition: all 0.3s ease;
+    }
 
-        .btn-add {
-            background-color: #00b894;
-            border: none;
-            color: white;
-            font-weight: 500;
-            border-radius: 10px;
-            padding: 10px 20px;
-            transition: 0.3s;
-        }
+    .btn-add:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(90deg, #01a17d, #1280df);
+    }
 
-        .btn-add:hover {
-            background-color: #019f7f;
-        }
+    /* Table Styling */
+    table {
+      width: 100%;
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
 
-        table {
-            width: 100%;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
+    th {
+      background: #2575fc;
+      color: #fff;
+      padding: 15px;
+      font-weight: 600;
+    }
 
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
+    td {
+      padding: 14px;
+      color: #333;
+      font-weight: 500;
+    }
 
-        th {
-            background-color: #0984e3;
-            color: #fff;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
+    tr:nth-child(even) {
+      background-color: rgba(255,255,255,0.4);
+    }
 
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
+    tr:hover {
+      background-color: rgba(37,117,252,0.1);
+    }
 
-        .action-btn {
-            border: none;
-            padding: 5px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-right: 5px;
-            font-size: 14px;
-            color: white;
-        }
+    .action-btn {
+      border: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      color: #fff;
+      transition: 0.3s;
+    }
 
-        .btn-edit {
-            background-color: #00b894;
-        }
+    .btn-edit {
+      background-color: #00b894;
+    }
+    .btn-edit:hover {
+      background-color: #019f7f;
+    }
+    .btn-delete {
+      background-color: #ff4757;
+    }
+    .btn-delete:hover {
+      background-color: #e84118;
+    }
 
-        .btn-edit:hover {
-            background-color: #019f7f;
-        }
+    /* Modal Styling */
+    .modal-content {
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      border: none;
+    }
 
-        .btn-delete {
-            background-color: #d63031;
-        }
+    .modal-header {
+      background: linear-gradient(90deg, #2575fc, #6a11cb);
+      color: white;
+      border-bottom: none;
+    }
 
-        .btn-delete:hover {
-            background-color: #c0392b;
-        }
+    .modal-footer {
+      border-top: none;
+    }
 
-        @media (max-width: 768px) {
-            .main-content {
-                margin-left: 20px;
-                padding: 20px;
-            }
-
-            table, th, td {
-                font-size: 14px;
-            }
-        }
-    </style>
+    @media (max-width: 768px) {
+      .main-content {
+        margin-left: 0;
+        padding: 25px;
+      }
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo">
-            <img src="images/personal-growth.png" alt="Logo" class="logo-img">
-            <span class="logo-text">Finance</span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="dashoboard.php">Dashboard</a></li>
-            <li><a href="home.php">Home</a></li>
-            <li><a href="categories.php">Categories</a></li>
-            <li><a href="accounts.php" class="active">Accounts</a></li>
-            <li><a href="transactions.php">Transactions</a></li>
-            <li><a href="reports.php">Reports</a></li>
-            <li><a href="sync.php">Backup</a></li>
-            <li><a href="profile.php">Profile</a></li>
-        </ul>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <img src="logo.jpeg" alt="Logo">
+      <span class="logo-text">PFMS</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="dashboard.php">Dashboard</a></li>
+      <li><a href="home.php">Home</a></li>
+      <li><a href="categories.php">Categories</a></li>
+      <li><a href="accounts.php" class="active">Accounts</a></li>
+      <li><a href="transactions.php">Transactions</a></li>
+      <li><a href="reports.php">Reports</a></li>
+      <li><a href="sync.php">Backup</a></li>
+      <li><a href="profile.php">Profile</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="header">
+      <h2>Manage Accounts</h2>
+      <button class="btn-add" data-bs-toggle="modal" data-bs-target="#addAccountModal">➕ Add New Account</button>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="header">
-            <h2>Accounts</h2>
-            <button class="btn-add" onclick="addAccount();">➕ Add New Account</button>
+    <table class="table table-borderless align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Account Name</th>
+          <th>Type</th>
+          <th>Balance</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($accounts as $acc): ?>
+          <tr>
+            <td><?= $acc['id']; ?></td>
+            <td><?= htmlspecialchars($acc['name']); ?></td>
+            <td><?= $acc['type']; ?></td>
+            <td>$<?= number_format($acc['balance'], 2); ?></td>
+            <td>
+              <button class="action-btn btn-edit" data-bs-toggle="modal" data-bs-target="#editAccountModal"
+                onclick="editAccount(<?= $acc['id']; ?>, '<?= $acc['name']; ?>', '<?= $acc['type']; ?>', <?= $acc['balance']; ?>)">
+                Edit
+              </button>
+              <button class="action-btn btn-delete" onclick="deleteAccount(<?= $acc['id']; ?>)">Delete</button>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add Account Modal -->
+  <div class="modal fade" id="addAccountModal" tabindex="-1" aria-labelledby="addAccountLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="addAccountLabel">Add New Account</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
-
-        <table class="table table-borderless">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Account Name</th>
-                    <th>Type</th>
-                    <th>Balance</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($accounts as $acc): ?>
-                <tr>
-                    <td><?php echo $acc['id']; ?></td>
-                    <td><?php echo htmlspecialchars($acc['name']); ?></td>
-                    <td><?php echo $acc['type']; ?></td>
-                    <td>$<?php echo number_format($acc['balance'],2); ?></td>
-                    <td>
-                        <button class="action-btn btn-edit" onclick="editAccount(<?php echo $acc['id']; ?>)">Edit</button>
-                        <button class="action-btn btn-delete" onclick="deleteAccount(<?php echo $acc['id']; ?>)">Delete</button>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <div class="modal-body">
+          <form id="addAccountForm">
+            <div class="mb-3">
+              <label class="form-label">Account Name</label>
+              <input type="text" class="form-control" id="accountName" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Type</label>
+              <select id="accountType" class="form-select" required>
+                <option value="Bank">Bank</option>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Initial Balance ($)</label>
+              <input type="number" class="form-control" id="accountBalance" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Add Account</button>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function addAccount() {
-            alert('Open Add Account form here!');
-        }
+  <!-- Edit Account Modal -->
+  <div class="modal fade" id="editAccountModal" tabindex="-1" aria-labelledby="editAccountLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="editAccountLabel">Edit Account</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editAccountForm">
+            <input type="hidden" id="editAccountId">
+            <div class="mb-3">
+              <label class="form-label">Account Name</label>
+              <input type="text" class="form-control" id="editAccountName" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Type</label>
+              <select id="editAccountType" class="form-select" required>
+                <option value="Bank">Bank</option>
+                <option value="Cash">Cash</option>
+                <option value="Card">Card</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Balance ($)</label>
+              <input type="number" class="form-control" id="editAccountBalance" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Save Changes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        function editAccount(id) {
-            alert('Edit account with ID: ' + id);
-        }
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function editAccount(id, name, type, balance) {
+      document.getElementById('editAccountId').value = id;
+      document.getElementById('editAccountName').value = name;
+      document.getElementById('editAccountType').value = type;
+      document.getElementById('editAccountBalance').value = balance;
+    }
 
-        function deleteAccount(id) {
-            if(confirm('Are you sure you want to delete account ID ' + id + '?')) {
-                alert('Account deleted (simulate)');
-            }
-        }
-    </script>
+    function deleteAccount(id) {
+      if (confirm('Are you sure you want to delete account ID ' + id + '?')) {
+        alert('Account deleted (simulation)');
+      }
+    }
+
+    document.getElementById('addAccountForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('New account added (simulation)');
+    });
+
+    document.getElementById('editAccountForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Account details updated (simulation)');
+    });
+  </script>
 </body>
 </html>

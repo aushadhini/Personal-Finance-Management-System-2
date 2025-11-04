@@ -208,7 +208,7 @@ tr:hover { background-color: rgba(0,0,0,0.05); }
         <li><a href="accounts.php">Accounts</a></li>
         <li><a href="transactions.php" class="active">Transactions</a></li>
         <li><a href="reports.php">Reports</a></li>
-        <li><a href="backup.php">Backup</a></li>
+        <li><a href="sync.php">Backup</a></li>
         <li><a href="profile.php">Profile</a></li>
     </ul>
 </div>

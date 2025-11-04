@@ -175,7 +175,7 @@ body {
         <li><a href="accounts.php">Accounts</a></li>
         <li><a href="transactions.php">Transactions</a></li>
         <li><a href="reports.php" class="active">Reports</a></li>
-        <li><a href="backup.php">Backup</a></li>
+        <li><a href="sync.php">Backup</a></li>
         <li><a href="profile.php">Profile</a></li>
     </ul>
 </div>
